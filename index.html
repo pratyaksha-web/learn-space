@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LearnSpace — Educational Blog</title>
+<style>
+  
+  :root{
+    --bg: #fff8f5;
+    --card: #ffffff;
+    --muted: #6b6b6b;
+    --text: #2b1f1a;
+    --accent: #8B5E3C;
+    --accent-2: #A26B45;
+    --accent-3: #D1B89A;
+    --shadow: 0 10px 30px rgba(20,20,30,0.06);
+    --radius:12px;
+    --maxw:1100px;
+    --tagBg: #f6ebe1;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    background: linear-gradient(180deg,#fffcfb,#fff6f0);
+    color:var(--text);
+    line-height:1.45;
+  }
+
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px;}
+
+  /* Header */
+  header{
+    background: linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-3));
+    color:white;padding:14px 0;box-shadow:0 6px 20px rgba(0,0,0,0.06);position:sticky;top:0;z-index:80;
+  }
+  .header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800}
+  .brand .logo-box{width:48px;height:48px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:900}
+  nav{display:flex;gap:14px;align-items:center}
+  nav a{color:white;font-weight:700;padding:6px 8px;border-radius:8px}
+  nav a:hover{background:rgba(255,255,255,0.08)}
+
+  /* Hero */
+  .hero{max-width:var(--maxw);margin:22px auto;padding:0 16px;display:flex;gap:18px;align-items:center}
+  .hero-card{flex:1;background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);display:flex;gap:16px;align-items:center}
+  .hero-img{width:180px;height:110px;object-fit:cover;border-radius:10px;background:#efe4db}
+  .hero h1{margin:0;color:var(--accent);font-size:1.3rem}
+  .hero p{margin:6px 0 0;color:var(--muted)}
+
+  /* Layout */
+  main{max-width:var(--maxw);margin:18px auto;padding:0 16px 80px}
+  .layout{display:grid;grid-template-columns:1fr 320px;gap:18px}
+  .card{background:var(--card);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+  .muted{color:var(--muted)}
+
+  /* Filters / categories / tags */
+  .filters{display:flex;gap:8px;flex-wrap:wrap}
+  .filter-btn{background:var(--tagBg);border:1px solid #ead8c8;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:700;color:var(--text)}
+  .filter-btn.active{background:linear-gradient(180deg,var(--accent-3),#fff);border-color:rgba(0,0,0,0.06)}
+
+  /* Posts grid */
+  .posts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:12px}
+  .post{border-radius:10px;overflow:hidden;display:flex;flex-direction:column;background:var(--card);box-shadow:var(--shadow)}
+  .post .thumb{width:100%;aspect-ratio:16/11;object-fit:cover;background:#efe4db}
+  .post-body{padding:12px;display:flex;flex-direction:column;gap:8px}
+  .post-title{font-weight:800;color:var(--accent);font-size:1rem}
+  .post-excerpt{color:var(--muted);font-size:0.95rem}
+  .post-meta{display:flex;gap:8px;align-items:center;font-size:0.9rem;color:var(--muted)}
+  .tag{display:inline-block;background:var(--tagBg);padding:6px 8px;border-radius:8px;font-weight:700;color:var(--accent-2);font-size:0.85rem;margin-right:6px}
+
+  /* Post modal (detail) */
+  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:120}
+  .modal{width:92%;max-width:900px;background:var(--card);border-radius:12px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,0.2);max-height:90vh;overflow:auto}
+  .modal .hero-img{width:100%;height:260px;border-radius:10px}
+  .close-btn{background:#f2f0ee;border:none;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* Comments */
+  .comments{margin-top:14px}
+  .comment{border-top:1px dashed #efe6df;padding:10px 0}
+  .comment strong{display:block}
+  .comment small{color:var(--muted)}
+  .comment-form input, .comment-form textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #eee;margin-top:6px;font-family:inherit}
+  .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:800}
+
+  /* Right column widgets */
+  .widget h3{margin:0 0 8px}
+  .category-list, .tag-cloud{display:flex;flex-direction:column;gap:8px}
+  .small-muted{font-size:0.95rem;color:var(--muted)}
+
+  /* Search */
+  .search {display:flex;gap:8px}
+  .search input{flex:1;padding:10px;border-radius:8px;border:1px solid #eee}
+
+  /* responsive */
+  @media (max-width:980px){
+    .layout{grid-template-columns:1fr}
+    .hero{flex-direction:column;gap:12px}
+    .hero-img{width:100%;height:140px}
+    .modal .hero-img{height:180px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="wrap header-inner">
+    <div class="brand">
+      <div class="logo-box">LS</div>
+      <div style="font-weight:900">LearnSpace</div>
+    </div>
+
+    <nav aria-label="Main nav">
+      <a href="#blog">Home</a>
+      <a href="#categories">Categories</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-card wrap">
+    
+    <div>
+      <h1>Educational blog for practical learning</h1>
+      <p class="muted">Bite-sized tutorials, clear explanations and hands-on examples covering technology, productivity and personal finance — written in warm, easy-to-follow language.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Main -->
+<main>
+  <div class="layout wrap">
+
+    <!-- Left / Posts -->
+    <section>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+          <div style="display:flex;gap:12px;align-items:center">
+            <strong style="font-size:1.02rem">All Articles</strong>
+            <div class="small-muted">— filtered by categories & tags</div>
+          </div>
+
+          <div class="search" role="search">
+            <input id="search" placeholder="Search posts (tech, health, finance...)" />
+            <button class="btn" id="clearSearch">Clear</button>
+          </div>
+        </div>
+
+        <!-- filters -->
+        <div style="margin-top:12px" class="filters" id="categoryFilters">
+          <!-- categories inserted here -->
+        </div>
+
+        <div id="posts" class="posts" aria-live="polite">
+          <!-- posts inserted here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Right / Sidebar -->
+    <aside>
+      <div class="card widget" id="aboutWidget">
+        <h3>About LearnSpace</h3>
+        <p class="muted">A small blog focused on clear explanations and practical steps. Categories include Technology, Health, and Finance. Designed to be readable and useful — no fluff.</p>
+      </div>
+
+      <div class="card widget" style="margin-top:12px;">
+        <h3>Categories</h3>
+        <div class="category-list" id="categoryList"></div>
+      </div>
+
+      <div class="card widget" style="margin-top:12px;">
+        <h3>Tags</h3>
+        <div id="tagCloud" class="tag-cloud"></div>
+      </div>
+
+      <div class="card widget" style="margin-top:12px;">
+        <h3>Popular Posts</h3>
+        <div id="popularList" class="small-muted"></div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- Post detail modal -->
+<div id="modalBack" class="modal-back" role="dialog" aria-modal="true">
+  <div class="modal" role="document" aria-labelledby="modalTitle">
+    <div style="display:flex;justify-content:flex-end">
+      <button class="close-btn" id="closeModal">Close</button>
+    </div>
+    <img id="modalImg" class="hero-img" src="" alt="">
+    <h2 id="modalTitle" style="margin-top:12px"></h2>
+    <div id="modalMeta" class="muted" style="margin-top:6px"></div>
+    <article id="modalContent" style="margin-top:12px;color:var(--text)"></article>
+
+    <!-- Comments -->
+    <section class="comments">
+      <h3>Comments</h3>
+      <div id="commentList" aria-live="polite"></div>
+
+      <div style="margin-top:12px" class="comment-form">
+        <input id="cname" placeholder="Your name" />
+        <textarea id="cmsg" placeholder="Write a helpful comment..." style="min-height:80px;margin-top:8px"></textarea>
+        <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+          <button class="btn" id="postComment">Post Comment</button>
+          <div class="muted" id="commentMsg" style="font-size:0.95rem"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+
+const posts = [
+  {
+    id: 't1',
+    title: 'Intro to Python: A Beginner Friendly Guide',
+    category: 'Technology',
+    tags: ['python','beginner','coding'],
+    excerpt: 'Start writing Python quickly — setup, variables, and small examples you can run today.',
+    image: 'post-1.jpg',
+    content: `<p>Python is a beginner-friendly language used for web dev, data science, automation and more. This article covers installation, a short example, and small exercises.</p>
+              <h4>Quick example</h4>
+              <pre>print("Hello, world!")</pre>`
+  },
+  {
+    id: 'h1',
+    title: '5 Simple Habits for Better Mental Health',
+    category: 'Health',
+    tags: ['mental-health','habits'],
+    excerpt: 'Small daily practices that improve focus, mood and resilience.',
+    image: 'post-2.jpg',
+    content: `<p>Healthy habits are small actions repeated each day. This article lists five practical habits and how to make them stick.</p>
+              <ul><li>Sleep schedule</li><li>Short walks</li><li>Mindful breaks</li></ul>`
+  },
+  {
+    id: 'f1',
+    title: 'Personal Finance 101: Saving & Budgeting',
+    category: 'Finance',
+    tags: ['budget','savings','personal-finance'],
+    excerpt: 'A short guide to building a basic budget and starting an emergency fund.',
+    image: 'post-3.jpg',
+    content: `<p>Personal finance begins with tracking income and expenses. Learn a simple 50/30/20 rule and how to set up a basic emergency fund.</p>`
+  },
+  {
+    id: 't2',
+    title: 'How to Build Small Web Pages with HTML & CSS',
+    category: 'Technology',
+    tags: ['html','css','web'],
+    excerpt: 'A practical walkthrough to create your first static page and style it.',
+    image: 'post-4.jpg',
+    content: `<p>HTML gives structure; CSS adds style. Follow these steps to create and style a personal site.</p>`
+  }
+];
+
+
+const COMMENT_KEY = 'learnspace_comments_v1';
+let comments = JSON.parse(localStorage.getItem(COMMENT_KEY) || '{}'); // { postId: [ {name, text, time}, ... ] }
+
+/* ====== Render helpers ====== */
+const postsContainer = document.getElementById('posts');
+const categoryFilters = document.getElementById('categoryFilters');
+const categoryList = document.getElementById('categoryList');
+const tagCloud = document.getElementById('tagCloud');
+const popularList = document.getElementById('popularList');
+const searchInput = document.getElementById('search');
+const clearSearch = document.getElementById('clearSearch');
+
+/* Derived lists */
+function unique(arr, key){ return [...new Set(arr.map(x => x[key]))] }
+const categories = unique(posts, 'category');
+const tags = [...new Set(posts.flatMap(p => p.tags))];
+
+/* Build category filters */
+function initFilters(){
+  categoryFilters.innerHTML = '';
+  categoryList.innerHTML = '';
+  categories.forEach(cat=>{
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.textContent = cat;
+    btn.onclick = ()=> { filterByCategory(cat); setActiveFilter(btn) };
+    categoryFilters.appendChild(btn);
+
+    const li = document.createElement('div');
+    li.innerHTML = `<a href="#" onclick="event.preventDefault(); filterByCategory('${cat}');">${cat}</a>`;
+    categoryList.appendChild(li);
+  });
+
+  /* All button */
+  const allBtn = document.createElement('button');
+  allBtn.className = 'filter-btn active';
+  allBtn.textContent = 'All';
+  allBtn.onclick = ()=>{ renderPostList(posts); clearActiveFilters(); allBtn.classList.add('active') };
+  categoryFilters.insertBefore(allBtn, categoryFilters.firstChild);
+}
+
+/* Tag cloud */
+function initTags(){
+  tagCloud.innerHTML = '';
+  tags.forEach(t=>{
+    const s = document.createElement('span');
+    s.className = 'tag';
+    s.textContent = t;
+    s.onclick = ()=> { filterByTag(t) };
+    tagCloud.appendChild(s);
+  });
+}
+
+/* Popular posts */
+function initPopular(){
+  popularList.innerHTML = '';
+  posts.slice(0,3).forEach(p=>{
+    const el = document.createElement('div');
+    el.innerHTML = `<a href="#" onclick="openPost('${p.id}');event.preventDefault()">${p.title}</a>`;
+    popularList.appendChild(el);
+  });
+}
+
+/* Render posts grid */
+function renderPostList(list){
+  postsContainer.innerHTML = '';
+  if(list.length === 0){ postsContainer.innerHTML = '<div class="muted">No posts found.</div>'; return; }
+  list.forEach(p=>{
+    const el = document.createElement('article');
+    el.className = 'post';
+    el.innerHTML = `
+      <img class="thumb" src="${p.image}" alt="${p.title}">
+      <div class="post-body">
+        <div class="post-title">${p.title}</div>
+        <div class="post-excerpt">${p.excerpt}</div>
+        <div class="post-meta">
+          <div class="muted">${p.category}</div>
+          <div style="flex:1"></div>
+          <div>${p.tags.map(t=>`<span class="tag" onclick="filterByTag('${t}')">${t}</span>`).join(' ')}</div>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+          <button class="btn" onclick="openPost('${p.id}')">Read</button>
+        </div>
+      </div>
+    `;
+    postsContainer.appendChild(el);
+  });
+}
+
+/* Filter functions */
+function filterByCategory(cat){
+  const list = posts.filter(p => p.category === cat);
+  renderPostList(list);
+  clearActiveFilters();
+  // highlight active button
+  [...categoryFilters.children].forEach(btn=>{
+    if(btn.textContent === cat) btn.classList.add('active'); else btn.classList.remove('active');
+  });
+}
+function filterByTag(tag){
+  const list = posts.filter(p => p.tags.includes(tag));
+  renderPostList(list);
+  clearActiveFilters();
+}
+function clearActiveFilters(){
+  [...categoryFilters.children].forEach(btn=>btn.classList.remove('active'));
+}
+
+/* Search */
+searchInput.addEventListener('input', e=>{
+  const q = e.target.value.trim().toLowerCase();
+  if(!q) { renderPostList(posts); return; }
+  const list = posts.filter(p => (p.title + ' ' + p.excerpt + ' ' + p.tags.join(' ')).toLowerCase().includes(q));
+  renderPostList(list);
+});
+clearSearch.addEventListener('click', ()=>{ searchInput.value=''; renderPostList(posts) });
+
+/* Modal / Post detail */
+const modalBack = document.getElementById('modalBack');
+const modalTitle = document.getElementById('modalTitle');
+const modalImg = document.getElementById('modalImg');
+const modalMeta = document.getElementById('modalMeta');
+const modalContent = document.getElementById('modalContent');
+const commentList = document.getElementById('commentList');
+let currentPostId = null;
+
+function openPost(id){
+  const p = posts.find(x => x.id === id);
+  if(!p) return;
+  currentPostId = id;
+  modalTitle.textContent = p.title;
+  modalImg.src = p.image;
+  modalMeta.textContent = `${p.category} • ${p.tags.join(', ')}`;
+  modalContent.innerHTML = p.content;
+  renderComments(id);
+  modalBack.style.display = 'flex';
+  // focus name field
+  document.getElementById('cname').value = '';
+  document.getElementById('cmsg').value = '';
+  document.getElementById('commentMsg').textContent = '';
+}
+
+/* Close modal */
+document.getElementById('closeModal').addEventListener('click', ()=> { modalBack.style.display = 'none'; currentPostId = null; });
+
+/* Comments rendering and posting */
+function renderComments(postId){
+  commentList.innerHTML = '';
+  const list = comments[postId] || [];
+  if(list.length === 0) { commentList.innerHTML = '<div class="muted">No comments yet — be the first to share a helpful tip.</div>'; return; }
+  list.forEach(c=>{
+    const d = document.createElement('div');
+    d.className = 'comment';
+    d.innerHTML = `<strong>${escapeHtml(c.name)}</strong><small>${new Date(c.time).toLocaleString()}</small><div style="margin-top:6px">${escapeHtml(c.text)}</div>`;
+    commentList.appendChild(d);
+  });
+}
+
+document.getElementById('postComment').addEventListener('click', ()=>{
+  const name = document.getElementById('cname').value.trim() || 'Anonymous';
+  const text = document.getElementById('cmsg').value.trim();
+  if(!currentPostId) return;
+  if(!text){ document.getElementById('commentMsg').textContent = 'Please write a comment before posting.'; return; }
+  const obj = { name, text, time: Date.now() };
+  if(!comments[currentPostId]) comments[currentPostId] = [];
+  comments[currentPostId].unshift(obj);
+  localStorage.setItem(COMMENT_KEY, JSON.stringify(comments));
+  renderComments(currentPostId);
+  document.getElementById('cmsg').value = '';
+  document.getElementById('commentMsg').textContent = 'Thanks — comment posted.';
+  setTimeout(()=> document.getElementById('commentMsg').textContent = '', 1600);
+});
+
+/* Utility: simple escape */
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* Initialize UI */
+initFilters();
+initTags();
+initPopular();
+renderPostList(posts);
+
+/* Accessibility: close modal when clicking backdrop */
+modalBack.addEventListener('click', (e)=>{ if(e.target === modalBack) { modalBack.style.display='none'; currentPostId = null; } });
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape'){ modalBack.style.display='none'; currentPostId = null; } });
+
+</script>
+</body>
+</html>
